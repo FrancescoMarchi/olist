@@ -41,3 +41,17 @@ USING order_delivered_customer_date::timestamp;
 ALTER TABLE olist.olist_orders_dataset
 ALTER COLUMN order_estimated_delivery_date TYPE timestamp
 USING order_estimated_delivery_date::timestamp;
+
+-- ============================================
+-- Table: olist_order_items_dataset
+-- Purpose: Fix column types (price, freight_value 
+-- imported correctly as float4 — only shipping_limit_date needed fixing)
+-- ============================================
+
+-- Check for empty strings first (result: 0, no UPDATE needed)
+-- SELECT COUNT(*) FROM olist.olist_order_items_dataset WHERE shipping_limit_date = '';
+
+-- Convert shipping_limit_date to timestamp
+ALTER TABLE olist.olist_order_items_dataset
+ALTER COLUMN shipping_limit_date TYPE timestamp
+USING shipping_limit_date::timestamp;
