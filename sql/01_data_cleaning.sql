@@ -55,3 +55,21 @@ USING order_estimated_delivery_date::timestamp;
 ALTER TABLE olist.olist_order_items_dataset
 ALTER COLUMN shipping_limit_date TYPE timestamp
 USING shipping_limit_date::timestamp;
+
+-- ============================================
+-- FIX: olist_order_items_dataset duplication
+-- Root cause: accidental double-import during Phase 1 
+-- (likely during CSV import retry after reviews_dataset error)
+-- Discovered: row count was 225,300 instead of expected ~112,650
+-- ============================================
+
+TRUNCATE TABLE olist.olist_order_items_dataset;
+-- Re-imported olist_order_items_dataset.csv via DBeaver Import Data wizard
+
+-- Re-applied type fix after re-import (re-import resets column types to varchar)
+ALTER TABLE olist.olist_order_items_dataset
+ALTER COLUMN shipping_limit_date TYPE timestamp
+USING shipping_limit_date::timestamp;
+
+-- Verified: no empty strings found (COUNT = 0), no UPDATE needed
+-- Verified: row count now 112,650 (correct)
