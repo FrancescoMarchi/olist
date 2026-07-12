@@ -15,3 +15,17 @@ FROM olist.v_master_orders
 WHERE order_purchase_timestamp >= '2017-01-01' AND order_purchase_timestamp < '2018-01-01'
 GROUP BY product_category_name
 ORDER BY total_revenue DESC;
+
+-- Added items_sold alongside revenue, to distinguish 
+-- volume-driven categories from high-ticket/premium categories.
+-- Finding: top category (cama_mesa_banho) leads on BOTH metrics -
+-- broad-based demand, not a single high-value outlier.
+
+SELECT
+    product_category_name,
+    SUM(price) AS total_revenue,
+    COUNT(*) AS items_sold
+FROM olist.v_master_orders
+WHERE order_purchase_timestamp >= '2017-01-01' AND order_purchase_timestamp < '2018-01-01'
+GROUP BY product_category_name
+ORDER BY total_revenue DESC;
