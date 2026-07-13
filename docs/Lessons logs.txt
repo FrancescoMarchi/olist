@@ -86,6 +86,8 @@ Root cause: likely the CSV import wizard retry after the `order_reviews` error d
 
 **Key takeaway:** duplication bugs like this are silent — no errors, no warnings, every query still runs and every chart still renders plausibly. The only real defense is cross-checking numbers against known reference values or independently derived figures at multiple points in a project, not just once at import time.
 
+24. A view's underlying JOINs can silently corrupt every query built on top of it, retroactively, if a source table issue exists but is discovered after the view was already modified and used.
+
 ---
 
 ## Key Business Findings Summary
