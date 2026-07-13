@@ -88,6 +88,8 @@ Root cause: likely the CSV import wizard retry after the `order_reviews` error d
 
 24. A view's underlying JOINs can silently corrupt every query built on top of it, retroactively, if a source table issue exists but is discovered after the view was already modified and used.
 
+Takeaway: the same view can be silently correct for some queries and silently wrong for others, purely depending on when each query happened to run relative to when an upstream bug was introduced or fixed. Re-verifying old queries after any upstream data fix — not just checking new ones — is essential; a single "found the bug, fixed the table" moment doesn't guarantee every downstream artifact is safe unless each one is explicitly re-checked.
+
 ---
 
 ## Key Business Findings Summary
