@@ -1,0 +1,105 @@
+# Project Lessons Log
+### Olist E-commerce Analytics Project
+
+A running record of technical lessons, data quality issues, and decisions made throughout this project. Useful reference for the README and for future projects.
+
+---
+
+**1. CSV imports default everything to text.**
+Even obvious date columns get imported as `varchar` unless explicitly typed. Always check column types after import — don't assume.
+
+**2. `ALTER TABLE ... ALTER COLUMN ... TYPE x USING x::type` converts a column's type permanently** (vs. `CAST`, which only converts within a single query, not persistently).
+
+**3. Empty strings (`''`) are not the same as NULL.**
+A text column can hold `''` which looks empty but isn't a true NULL. Casting `''` to `timestamp` fails, while casting a real `NULL` succeeds cleanly.
+
+**4. DBeaver's Columns/Properties tab can show stale cached info.**
+Always verify a column's real current type via:
+```sql
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_schema = '...' AND table_name = '...' AND column_name = '...';
+```
+Don't trust the UI tab blindly — trust the database directly.
+
+**5. Once a column is `timestamp`, comparing it to `''` will error.**
+Postgres tries to implicitly cast `''` to timestamp to do the comparison, and fails. If you see this error, it usually means the column already got converted — check its real type before assuming the fix didn't run.
+
+**6. Verify, don't assume — even your own completed work.**
+A step you believe you did (like an ALTER TABLE) might have been skipped or lost in the middle of troubleshooting something else. Always re-check ground truth before moving forward.
+
+**7. Always run the COUNT check first, even when you expect zero.**
+Don't skip straight to fixing — confirming *whether a problem exists* is a distinct step from fixing it.
+
+**8. Don't rename source data columns, even when they contain typos.**
+`product_name_lenght` / `product_description_lenght` are misspelled in the original Olist dataset. Left as-is in the raw table to preserve fidelity to the source — renaming happens only at the presentation layer (SQL aliases, Power BI labels), never at the source.
+
+**9. When documentation is unclear or contradictory, verify against the data itself.**
+Don't over-rely on secondary blog posts; the database is more authoritative than someone's article. `order_item_id` in Olist does not reliably increment per item within an order, despite some sources claiming it does — verified empirically against the real data.
+
+**10. `order_item_id` in Olist is unreliable as a sequential position marker.**
+Most orders show repeated values rather than incrementing 1, 2, 3. Don't use it for counting items per order; use `COUNT(*) GROUP BY order_id` instead, which counts actual rows regardless of this column's quirky behavior.
+
+**11. The `''` vs `NULL` distinction isn't limited to dates.**
+It can appear in any text column. Always check both `IS NULL` and `= ''` when investigating "missing" values.
+
+**12. Always verify row counts against the known/expected dataset size after import — especially after any failed or retried import.**
+A table with exactly double the expected rows is a strong signal of accidental re-import, not a data quality issue in the source.
+
+**13. Recognize the "already converted" false alarm pattern.**
+If a `WHERE column = ''` check errors with a timestamp cast message, check `information_schema.columns` first before assuming something is broken — the ALTER may have already succeeded.
+
+**14. Handle missing categorical data with explicit labeling (`CASE WHEN`), not silent deletion.**
+Especially when the missing rows still carry real business value (revenue). Always calculate the *percentage* affected before deciding whether it's a rounding-error-sized issue or a real problem.
+
+**15. Document analysis scoping decisions explicitly.**
+Timeframe chosen: Full calendar year 2017 (Jan 1 – Dec 31). Chosen for clarity and completeness — avoids partial months at the start (2016 ramp-up) and end (Sept 2018 cutoff) of the dataset.
+
+**16. Postgres's `ROUND(value, decimals)` only works on `numeric` type, not `double precision`** (what `AVG()`/`SUM()` on a float column returns). Cast explicitly with `::numeric` before rounding.
+
+**17. `::numeric` casts must wrap the entire expression being rounded, not just one operand.**
+If any part of a calculation involves `double precision`, the whole result stays `double precision` until explicitly cast.
+
+**18. `CREATE OR REPLACE VIEW` can only append new columns at the end of the SELECT list.**
+Inserting a column in the middle of existing ones causes a rename conflict, since Postgres tracks view columns by position, not name.
+
+**19. CSV exports/imports lose type information by default in both SQL and pandas.**
+Dates always come in as text and need explicit conversion, regardless of tool.
+
+**20. Double-check which panel (editor vs. terminal) code lands in when working in VS Code or similar tools.**
+The terminal prompt (e.g., `PS C:\...>`) is a reliable visual cue you're in the wrong place if you see code sitting next to it.
+
+**21. No `quantity` column exists in `order_items`.**
+When a customer buys multiple units of the same product in one order, this is represented as fully repeated rows (identical across every column), not a single row with a quantity value. This creates apparent "duplicates" that are not data errors. Every row is treated as one unit sold (no deduplication applied), to avoid understating revenue/volume.
+
+**22. `olist_customers_dataset` was found duplicated (198,882 rows instead of 99,441).**
+Discovered while connecting Power BI, not during the original Phase 1 review — well after the table had been used elsewhere without issue, since the duplication didn't affect anything until a live connection surfaced it. Fixed via TRUNCATE + clean re-import.
+
+**23. Full data integrity sweep — three of six imported tables were affected by the same accidental double-import.**
+Root cause: likely the CSV import wizard retry after the `order_reviews` error during Phase 1.
+- `orders` — clean (99,441)
+- `order_items` — fixed early (112,650, was 225,300)
+- `products` — clean (32,951)
+- `customers` — fixed later (99,441, was 198,882)
+- `order_payments` — fixed later (103,886, was 207,772)
+- `category_translation` — confirmed clean
+
+**Key takeaway:** duplication bugs like this are silent — no errors, no warnings, every query still runs and every chart still renders plausibly. The only real defense is cross-checking numbers against known reference values or independently derived figures at multiple points in a project, not just once at import time.
+
+---
+
+## Key Business Findings Summary
+
+1. **Product Performance:** Top category (`cama_mesa_banho`) leads on both revenue and volume. `relogios_presentes` achieves similar revenue with half the volume (premium category). Extreme drop-off at the bottom — lowest category generated just $152 all year, a ~3,278x gap vs. the top.
+
+2. **Order Structure:** 90% of orders are single-item. Average 1.14 items/order, $138.09 average revenue/order — minimal basket-building behavior.
+
+3. **Revenue Concentration (Category):** Top 15 of 73 categories generate 77.7% of revenue — near-textbook Pareto pattern.
+
+4. **Purchase Patterns:** Only 2.8% of customers made more than one order in 2017. Average 1.03 orders/customer — an acquisition-driven, not retention-driven, business.
+
+5. **Revenue Trend:** Clear growth across 2017, roughly 5-6x from January to peak months. November stands out with a ~50% spike above surrounding months, plausibly linked to Black Friday.
+
+6. **Geographic Revenue:** Extreme concentration — top 3 states (SP, RJ, MG) of 27 generate 62.4% of revenue. SP alone exceeds RJ and MG combined.
+
+**Unifying narrative:** revenue is consistently concentrated — by category, by geography, and by customer — while the business is genuinely growing over time. This is one coherent story observed from multiple independent angles, not a set of disconnected facts.
