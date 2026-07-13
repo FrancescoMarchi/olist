@@ -4,12 +4,18 @@
 -- growing, flat, or declining? Identify any anomalous months.
 -- Timeframe: Jan 1 - Dec 31, 2017
 --
+-- NOTE: This query was originally run against a version of the 
+-- view that had a fan-out bug (customers table was duplicated, 
+-- doubling all SUM(price) results). Corrected after the customers 
+-- table was fixed - see Lesson #24. Figures below are verified 
+-- correct (sum of all months ≈ $6.16M, matching Block 3's total).
+--
 -- Finding: Clear growth trend across the year - revenue grows 
--- roughly 5-6x from January (~$240K) to peak months (~$1.2-2M). 
--- November stands out as a sharp outlier (~$2.02M), about 50% 
--- higher than October and December. Likely explanation: Black 
--- Friday retail activity (Nov), though this is an inference, not 
--- confirmed by a specific event flag in the data.
+-- roughly 6x from January (~$120K) to peak months. November stands 
+-- out as a spike (~$1.01M), about 52% higher than October and 36% 
+-- higher than December. Likely explanation: Black Friday retail 
+-- activity (Nov), though this is an inference, not confirmed by a 
+-- specific event flag in the data.
 -- ============================================
 
 SELECT
