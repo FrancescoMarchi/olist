@@ -23,4 +23,26 @@ SELECT
 FROM olist.v_master_orders
 WHERE order_purchase_timestamp >= '2017-01-01' AND order_purchase_timestamp < '2018-01-01'
 GROUP BY product_category_name
-ORDER BY
+ORDER BY total_revenue DESC;
+
+-- ============================================
+-- Product Performance: Bottom Performers by Revenue (FY2017)
+-- Purpose: Identify weakest categories - candidates for review 
+-- (discontinue, re-merchandise, or investigate low visibility)
+--
+-- Finding: Extreme drop-off at the bottom - lowest category 
+-- (fraldas_higiene) generated just $152 across 4 items sold all 
+-- year, a ~3,278x gap vs. the top category (~$498K). This is a 
+-- cliff, not a gentle long tail - several categories show 
+-- negligible commercial activity.
+-- ============================================
+
+SELECT
+    product_category_name,
+    SUM(price) AS total_revenue,
+    COUNT(*) AS items_sold,
+    ROUND(AVG(price)::numeric, 2) AS avg_price
+FROM olist.v_master_orders
+WHERE order_purchase_timestamp >= '2017-01-01' AND order_purchase_timestamp < '2018-01-01'
+GROUP BY product_category_name
+ORDER BY total_revenue ASC;
