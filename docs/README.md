@@ -142,6 +142,7 @@ Revenue by State and Top 10 Categories by Revenue, both with data labels and con
 # 🚀 Recommendations
 
 Recommendations 1 and 2 below are sized using conservative, clearly-labeled "what if" scenarios calculated directly from this dataset — not predictive forecasts. They are meant to illustrate the *scale* of opportunity, not guarantee an outcome; no controlled experiment (e.g., A/B test) was run to validate them, since this is historical, observational data rather than experimental data.
+See sql/09_revenue_opportunity_sizing.sql for the full calculation behind both scenarios.
 
 1. **Invest in cross-sell and bundling strategies.**
 With 90% of orders single-item (average basket size: 1.14 items), there is substantial, quantifiable room to grow revenue per order. **If just 10% of single-item orders (4,014 of 40,135) added one more average-priced item ($121.02), that would add approximately $485,796 in revenue — a 7.9% uplift on 2017's total.** Tactically: "frequently bought together" prompts, bundle discounts, or free-shipping thresholds tied to a second item.
@@ -186,7 +187,8 @@ The 24 states outside the top 3 (SP, RJ, MG) generate just $2.31M combined — a
     │   ├── 05_revenue_concentration.sql
     │   ├── 06_purchase_patterns.sql
     │   ├── 07_revenue_trend.sql
-    │   └── 08_geographic_revenue.sql
+    │   ├── 08_geographic_revenue.sql
+    │   └── 09_revenue_opportunity_sizing.sql
     └── README.md
 
 ---
