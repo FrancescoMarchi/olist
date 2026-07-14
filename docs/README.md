@@ -124,14 +124,14 @@ Just **3 of 27 states — São Paulo, Rio de Janeiro, and Minas Gerais — gener
 ## Page 1 — Executive Summary
 *"Revenue Is Growing, But Concentrated in Few Categories and Repeat Buyers Are Rare"*
 
-![Executive Summary](docs/visuals/dashboard_page1_executive_summary.png)
+![Executive Summary](visuals/dashboard_page1_executive_summary.png)
 
 KPI cards (Total Revenue, Avg Revenue per Order, % Single-Item Orders, % Repeat Customers), a Monthly Revenue Trend chart annotated with the November seasonal spike, and a Revenue Concentration (Pareto) chart with the top-15 threshold highlighted directly on the data.
 
 ## Page 2 — Product & Geography Deep Dive
 *"São Paulo and a Handful of Categories Drive the Business"*
 
-![Product & Geography Deep Dive](docs/visuals/dashboard_page2_product_geography.png)
+![Product & Geography Deep Dive](visuals/dashboard_page2_product_geography.png)
 
 Revenue by State and Top 10 Categories by Revenue, both with data labels and concentration call-outs, showing exactly where the top-line findings come from.
 
