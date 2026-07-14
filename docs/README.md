@@ -124,14 +124,14 @@ Just **3 of 27 states — São Paulo, Rio de Janeiro, and Minas Gerais — gener
 ## Page 1 — Executive Summary
 *"Revenue Is Growing, But Concentrated in Few Categories and Repeat Buyers Are Rare"*
 
-![Executive Summary](visuals/dashboard_page1_executive_summary.png)
+![Executive Summary](docs/visuals/dashboard_page1_executive_summary.png)
 
 KPI cards (Total Revenue, Avg Revenue per Order, % Single-Item Orders, % Repeat Customers), a Monthly Revenue Trend chart annotated with the November seasonal spike, and a Revenue Concentration (Pareto) chart with the top-15 threshold highlighted directly on the data.
 
 ## Page 2 — Product & Geography Deep Dive
 *"São Paulo and a Handful of Categories Drive the Business"*
 
-![Product & Geography Deep Dive](visuals/dashboard_page2_product_geography.png)
+![Product & Geography Deep Dive](docs/visuals/dashboard_page2_product_geography.png)
 
 Revenue by State and Top 10 Categories by Revenue, both with data labels and concentration call-outs, showing exactly where the top-line findings come from.
 
@@ -141,13 +141,19 @@ Revenue by State and Top 10 Categories by Revenue, both with data labels and con
 
 # 🚀 Recommendations
 
-1. **Invest in cross-sell and bundling strategies.** With 90% of orders single-item and average basket size at just 1.14 items, there is substantial room to grow revenue per order without acquiring a single new customer — e.g., "frequently bought together" prompts, bundle discounts, or free-shipping thresholds tied to a second item.
+Recommendations 1 and 2 below are sized using conservative, clearly-labeled "what if" scenarios calculated directly from this dataset — not predictive forecasts. They are meant to illustrate the *scale* of opportunity, not guarantee an outcome; no controlled experiment (e.g., A/B test) was run to validate them, since this is historical, observational data rather than experimental data.
 
-2. **Treat the top 15 categories as strategic priorities.** These categories drive over three-quarters of revenue; inventory reliability, marketing spend, and seller support should be weighted accordingly. The bottom-performing categories are candidates for review — either discontinuation or investigation into why they're underperforming (visibility, pricing, or genuine low demand).
+1. **Invest in cross-sell and bundling strategies.**
+With 90% of orders single-item (average basket size: 1.14 items), there is substantial, quantifiable room to grow revenue per order. **If just 10% of single-item orders (4,014 of 40,135) added one more average-priced item ($121.02), that would add approximately $485,796 in revenue — a 7.9% uplift on 2017's total.** Tactically: "frequently bought together" prompts, bundle discounts, or free-shipping thresholds tied to a second item.
 
-3. **Investigate geographic expansion opportunities outside the SP–RJ–MG corridor.** With nearly two-thirds of revenue concentrated in three states, the business may be under-penetrated in the rest of Brazil — worth investigating whether this reflects genuine demand differences or a lack of marketing/logistics reach elsewhere.
+2. **Investigate and invest in the geographic long tail.**
+The 24 states outside the top 3 (SP, RJ, MG) generate just $2.31M combined — averaging only $96K per state, a fraction of 3rd-place MG's $723K. **Even a modest 10% uplift across this long tail would add approximately $231,390 — a 3.8% uplift** on 2017's total revenue. This is worth investigating specifically: is this a genuine demand gap, or a marketing/logistics reach problem?
 
-4. **Build toward a repeat-purchase strategy.** A 2.8% repeat rate is low for an e-commerce business; even modest improvements here (post-purchase email flows, loyalty incentives, replenishment reminders for consumable categories) could meaningfully change the revenue mix from acquisition-dependent to retention-supported.
+   **Combined, these two conservative scenarios represent roughly $717,000 in potential incremental revenue — about 11.7% of 2017's total — without requiring a single new customer acquisition channel.**
+
+3. **Treat the top 15 categories as strategic priorities.** These categories drive 77.7% of revenue; inventory reliability, marketing spend, and seller support should be weighted accordingly. The bottom-performing categories are candidates for review — either discontinuation or investigation into why they're underperforming (visibility, pricing, or genuine low demand).
+
+4. **Build toward a repeat-purchase strategy.** A 2.8% repeat rate is low for an e-commerce business; even modest improvements here (post-purchase email flows, loyalty incentives, replenishment reminders for consumable categories) could meaningfully shift the revenue mix from acquisition-dependent to retention-supported.
 
 5. **Prepare proactively for seasonal demand.** The November spike suggests seasonal events (e.g., Black Friday) meaningfully move revenue — inventory and logistics planning should anticipate this rather than react to it.
 
